@@ -31,7 +31,11 @@ class UserDao{
 
     async addUser(userFields: CreateUserDto) {
         const userId = shortid.generate();
-        const user = new this.User({_id:userId,...userFields,permissionFlags:1})
+        const user = new this.User({
+            _id:userId,
+            ...userFields,
+            permissionFlags:1
+        })
         await user.save();
         return userId;
     }
