@@ -3,6 +3,7 @@ import { body } from "express-validator";
 
 import { CommonRoutesConfig } from "../common/common.routes.config";
 import authController from "./controllers/auth.controller";
+import authMiddleware from "./middlewares/auth.middleware";
 import jwtMiddleware from "./middlewares/jwt.middleware";
 import bodyValidationMiddleware from "../users/middlewares/body.validation.middleware";
 
@@ -16,7 +17,14 @@ export class AuthRoutes extends CommonRoutesConfig {
         this.app.post(`/auth`, [
             body('email').isEmail(),
             body('password').isString(),
+            bodyValidationMiddleware.verifyBodyFieldsErrors,
+            authMiddleware.verifyUserPassword,
+            authController.createJWT,
+        ]);
+
+        this.app.post(`/auth/refresh-token`, [
             jwtMiddleware.validJWTNeeded,
+            jwtMiddleware.verifyRefreshBodyField,
             jwtMiddleware.validRefreshNeeded,
             authController.createJWT,
         ]);
