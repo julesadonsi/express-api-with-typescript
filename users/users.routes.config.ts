@@ -5,6 +5,7 @@ import { CommonRoutesConfig } from "../common/common.routes.config";
 import UsersController from "./controllers/users.controller";
 import UsersMiddlewares from "./middlewares/users.middlewares";
 import BodyValidationMiddleware from "./middlewares/body.validation.middleware";
+import AuthController from "../auth/controllers/auth.controller";
 
 export class UserRoutes extends CommonRoutesConfig{
     constructor(app:express.Application){

@@ -9,6 +9,7 @@ import debug from "debug";
 
 import { CommonRoutesConfig } from "./common/common.routes.config";
 import { UserRoutes } from "./users/users.routes.config";
+import { AuthRoutes } from "./auth/auth.routes.config";
 
 const app: express.Application = express();
 const server: http.Server = http.createServer(app);
@@ -23,7 +24,6 @@ app.use(cors());
 if(dotenvResult.error){
     throw dotenvResult.error;
 }
-
 // Loggin middleware
 const loggerOptions: expressWinston.LoggerOptions = {
     transports:[new winston.transports.Console()],
@@ -42,6 +42,7 @@ if (!process.env.DEBUG){
 app.use(expressWinston.logger(loggerOptions));
 
 routes.push(new UserRoutes(app));
+routes.push(new AuthRoutes(app));
 
 // this is a simple route to make sure everything is working properly
 const runningMessage = `Server running at http://localhost:${port}`;
