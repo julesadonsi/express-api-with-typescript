@@ -3,5 +3,4 @@ export enum PermissionFlag  {
     PAID_PERMISSION = 2,
     ANOTHER_PAID_PERMISSION = 4,
     ADMIN_PERMISSION = 8,
-    ALL_PERMISSIONS = 212147483647
 }

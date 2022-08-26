@@ -21,7 +21,7 @@ export class UserRoutes extends CommonRoutesConfig{
             .get(
                 jwtMiddleware.validJWTNeeded,
                 commonPermissionMiddleware.permissionFlagRequired(
-                    PermissionFlag.ADMIN_PERMISSION
+                    PermissionFlag.ADMIN_PERMISSION,
                 ),
                 UsersController.listUsers
             );

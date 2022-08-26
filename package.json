@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon app.ts",
+    "prod": "tsc && node --unhandled-rejections=strict ./dist/app.js",
     "debug": "export DEBUG=* && npm run start",
-
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
