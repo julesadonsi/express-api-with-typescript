@@ -5,7 +5,9 @@ import { CommonRoutesConfig } from "../common/common.routes.config";
 import UsersController from "./controllers/users.controller";
 import UsersMiddlewares from "./middlewares/users.middlewares";
 import BodyValidationMiddleware from "./middlewares/body.validation.middleware";
-import AuthController from "../auth/controllers/auth.controller";
+import jwtMiddleware from "../auth/middlewares/jwt.middleware";
+import commonPermissionMiddleware from "../common/middleware/common.permission.middleware";
+import { PermissionFlag } from "../common/middleware/common.permissionflag.enum";
 
 export class UserRoutes extends CommonRoutesConfig{
     constructor(app:express.Application){
@@ -14,16 +16,23 @@ export class UserRoutes extends CommonRoutesConfig{
 
     configureRoutes(): express.Application {
 
-        this.app.route('/users')
-            .get(UsersController.listUsers)
-            .post(
+        this.app
+            .route(`/users`)
+            .get(
+                jwtMiddleware.validJWTNeeded,
+                commonPermissionMiddleware.permissionFlagRequired(
+                    PermissionFlag.ADMIN_PERMISSION
+                ),
+                UsersController.listUsers
+            );
 
+        this.app.route('/users')
+            .post(
                 body('email').isEmail(),
                 body('password').isLength({min:5}).withMessage('Must include password (5+ characters'),
                 BodyValidationMiddleware.verifyBodyFieldsErrors,
                 UsersMiddlewares.validateSameEmailDoesntExist,
                 UsersController.createUser,
-
             );
 
         
@@ -31,7 +40,11 @@ export class UserRoutes extends CommonRoutesConfig{
 
         this.app
             .route(`/users/:userId`)
-            .all(UsersMiddlewares.validateUserExists)
+            .all(
+                UsersMiddlewares.validateUserExists,
+                jwtMiddleware.validJWTNeeded,
+                commonPermissionMiddleware.onlySameUserOrAdminCanDoThisAction
+            )
             .get(UsersController.getUserById)
             .delete(UsersController.removeUser);
 
