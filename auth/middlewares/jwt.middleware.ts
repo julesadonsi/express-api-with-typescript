@@ -51,6 +51,10 @@ class JwtMiddleware {
                     return res.status(401).send({message:"Unauthorize"});
                 } else {
                     res.locals.jwt = jwt.verify(authorization[1], jwtSecret) as Jwt;
+                    const user: any = await usersServices.getUserByEmailWithPassword(
+                        res.locals.jwt.email
+                    );
+                    res.locals.permissionFlags = user.permissionFlags;
                     next();
                 }
             } catch (error) {

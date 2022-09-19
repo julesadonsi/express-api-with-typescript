@@ -15,9 +15,9 @@ class CommonPermissionMiddleware {
         ) => {
             try {
                 const userPermissionFlags = parseInt(
-                    res.locals.jwt.permissionflags
+                    res.locals.jwt.permissionFlags
                 );
-                if (userPermissionFlags && requiredPermissionFlag) {
+                if (userPermissionFlags & requiredPermissionFlag) {
                     next();
                 } else {
                     res.status(403).send();

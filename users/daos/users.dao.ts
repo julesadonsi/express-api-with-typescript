@@ -3,7 +3,7 @@ import debug from "debug";
 
 
 import mongooseService from "../../common/services/mongoose.service";
-import { CreateUserDto } from '../dto/create.user.dto';
+import { CreateUserDto } from "../dto/create.user.dto";
 import { PatchUserDto } from '../dto/patch.user.dto';
 import { PutUserDto } from '../dto/put.user.dto';
 
@@ -45,7 +45,7 @@ class UserDao{
     }
 
     async getUserById(userId: string) {
-        return this.User.findOne({_id:userId}).populate('User').exec();
+        return this.User.findOne({_id:userId}).exec();
     }
 
     async getUsers(limit = 25, page = 0) {
