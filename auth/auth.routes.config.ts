@@ -12,11 +12,11 @@ import usersController from "../users/controllers/users.controller";
 
 export class AuthRoutes extends CommonRoutesConfig {
     constructor(app: express.Application) {
-        super(app, 'AuthRoutes');
+        super(app, 'AuthRoutes', '/api/v1'); 
     }
 
     configureRoutes(): express.Application {
-        this.app.post(`/login`, [
+        this.app.post(`${this.path}/login`, [
             body('email').isEmail(),
             body('password').isString(),
             bodyValidationMiddleware.verifyBodyFieldsErrors,
@@ -24,7 +24,7 @@ export class AuthRoutes extends CommonRoutesConfig {
             authController.createJWT,
         ]);
 
-        this.app.route('/register')
+        this.app.route(`${this.path}/register`)
             .post(
                 body('email').isEmail(),
                 body('password').isLength({min:5}).withMessage('Must include password (5+ characters'),
@@ -34,7 +34,7 @@ export class AuthRoutes extends CommonRoutesConfig {
             );
 
 
-        this.app.post(`/auth/refresh-token`, [
+        this.app.post(`${this.path}/auth/refresh-token`, [
             jwtMiddleware.validJWTNeeded,
             jwtMiddleware.verifyRefreshBodyField,
             jwtMiddleware.validRefreshNeeded,

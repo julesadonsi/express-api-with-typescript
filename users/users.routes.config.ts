@@ -11,13 +11,13 @@ import { PermissionFlag } from "../common/middleware/common.permissionflag.enum"
 
 export class UserRoutes extends CommonRoutesConfig{
     constructor(app:express.Application){
-        super(app, 'UserRoutes');
+        super(app, 'UserRoutes', 'api/v1');
     }
 
     configureRoutes(): express.Application {
 
         this.app
-            .route(`/users`)
+            .route(`${this.path}/users`)
             .get(
                 jwtMiddleware.validJWTNeeded,
                 commonPermissionMiddleware.permissionFlagRequired(
@@ -28,10 +28,10 @@ export class UserRoutes extends CommonRoutesConfig{
 
         
         
-        this.app.param(`userId`, UsersMiddlewares.extractUserId);
+        this.app.param(`${this.path}/userId`, UsersMiddlewares.extractUserId);
 
         this.app
-            .route(`/users/:userId`)
+            .route(`${this.path}/users/:userId`)
             .all(
                 UsersMiddlewares.validateUserExists,
                 jwtMiddleware.validJWTNeeded,
@@ -40,7 +40,7 @@ export class UserRoutes extends CommonRoutesConfig{
             .get(UsersController.getUserById)
             .delete(UsersController.removeUser);
 
-        this.app.put(`/users/:userId`, [
+        this.app.put(`${this.path}/users/:userId`, [
             body('email').isEmail(),
             body('password')
                 .isLength({min:5})
@@ -55,7 +55,7 @@ export class UserRoutes extends CommonRoutesConfig{
             UsersController.put,
         ]);
 
-        this.app.patch(`/users/:userId`, [
+        this.app.patch(`${this.path}/users/:userId`, [
             body('email').isEmail().optional(),
             body('password')
                 .isLength({min:5})
