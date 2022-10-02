@@ -18,6 +18,13 @@ class UserController {
         res.status(200).send(user);
     }
 
+    /**
+     * 
+     * @param req Request http
+     * @param res Response http
+     * 
+     * @response id user created
+     */
     async createUser(req: express.Request, res:express.Response) {
         req.body.password = await argon2.hash(req.body.password);
         const userId = await usersServices.create(req.body)

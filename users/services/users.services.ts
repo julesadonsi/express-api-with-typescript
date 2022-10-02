@@ -6,6 +6,11 @@ import { PatchUserDto } from "../dto/patch.user.dto";
 
 class UsersService implements CRUD {
 
+    /**
+     * 
+     * @param resource user resource {email, password and others fields}
+     * @returns 
+     */
     async create(resource: CreateUserDto){
         return usersDao.addUser(resource);
     }
