@@ -26,15 +26,7 @@ export class UserRoutes extends CommonRoutesConfig{
                 UsersController.listUsers
             );
 
-        this.app.route('/users')
-            .post(
-                body('email').isEmail(),
-                body('password').isLength({min:5}).withMessage('Must include password (5+ characters'),
-                BodyValidationMiddleware.verifyBodyFieldsErrors,
-                UsersMiddlewares.validateSameEmailDoesntExist,
-                UsersController.createUser,
-            );
-
+        
         
         this.app.param(`userId`, UsersMiddlewares.extractUserId);
 
