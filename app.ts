@@ -5,11 +5,13 @@ import * as winston from 'winston';
 import * as expressWinston from 'express-winston';
 import cors from "cors";
 import debug from "debug";
+import path from "path"
 
 
 import { CommonRoutesConfig } from "./common/common.routes.config";
 import { UserRoutes } from "./users/users.routes.config";
 import { AuthRoutes } from "./auth/auth.routes.config";
+import { WebRoutes } from "./web/web.routes.config";
 
 const app: express.Application = express();
 const server: http.Server = http.createServer(app);
@@ -20,6 +22,9 @@ const dotenvResult = dotenv.config();
 
 app.use(express.json());
 app.use(cors());
+
+app.set('views', path.join(__dirname,'web/views'));
+app.set('view engine', 'ejs');
 
 if(dotenvResult.error){
     throw dotenvResult.error;
@@ -43,6 +48,7 @@ app.use(expressWinston.logger(loggerOptions));
 
 routes.push(new UserRoutes(app));
 routes.push(new AuthRoutes(app));
+routes.push(new WebRoutes(app))
 
 // this is a simple route to make sure everything is working properly
 const runningMessage = `Server running at http://localhost:${port}`;
